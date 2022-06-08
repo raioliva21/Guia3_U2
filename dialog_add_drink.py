@@ -1,4 +1,3 @@
-from xmlrpc.client import Boolean
 from gi.repository import Gtk
 import gi
 gi.require_version("Gtk", "3.0")
@@ -8,8 +7,8 @@ class Dialog_add_drink(Gtk.Dialog):
     def __init__(self, parent):
         super().__init__(title="Añade Bebestible", transient_for=parent, flags=0)
         self._state = bool
-        self.drink = str
-        self.cost = int
+        self._drink = str
+        self._cost = int
         self.add_buttons(
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
         )
@@ -49,11 +48,18 @@ class Dialog_add_drink(Gtk.Dialog):
         tree_iter = combo.get_active_iter()
         if tree_iter is not None:
             model = combo.get_model()
-            self.cost, self.drink = model[tree_iter][:2]
-            print("Selected: Cost=%d, name=%s" % (self.cost, self.drink))
+            self._cost, self._drink = model[tree_iter][:2]
+            print("Selected: Cost=%d, name=%s" % (self._cost, self._drink))
         else:
             entry = combo.get_child()
             print("Entered: %s" % entry.get_text())
+
+    @property
+    def total_cost(self):
+        if self._state is not True:
+            return 0
+        else:
+            return self._cost * self.unidades.get_value_as_int()
     
     @property
     def state(self):
@@ -62,11 +68,8 @@ class Dialog_add_drink(Gtk.Dialog):
     @state.setter
     def state(self, boolean):
         if isinstance(boolean, bool):
-            print("cambia estado")
-            print(boolean)
             self._state = boolean
         else:
-            print("No es booleano")
             return False
     
     

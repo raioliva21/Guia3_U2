@@ -1,0 +1,14 @@
+[
+    {
+        "Fecha": "HAHAHA",
+        "Nombre": "Raimundo",
+        "Metodo de Pago": "Tarjeta Credito/Debito",
+        "Costo pedido": "5000"
+    },
+    {
+        "Fecha": "2",
+        "Nombre": "raimundo",
+        "Metodo de Pago": "Tarjeta Credito/Debito",
+        "Costo pedido": 7000
+    }
+]

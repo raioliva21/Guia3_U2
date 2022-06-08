@@ -1,8 +1,12 @@
-from http.client import ResponseNotReady
-import gi
+from about_dialog import AboutDialog
 from create_RowsAndBoxs import create_box, create_row
+from dialog_show_tree import DialogShowTree
+from file_actions import open_file, save_data
 from dialog_confirm_order import Dialog_confirm_order
 from dialog_add_drink import Dialog_add_drink
+from file_chooser import FileChooser
+import datetime
+import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -10,7 +14,8 @@ class Main(Gtk.Window):
 
     def __init__(self):
         super().__init__(title="HeaderBar Demo")
-        self.cost = 4000
+        self.file = None
+        self.burguer_price = 3500
         self.set_border_width(10)
         self.set_default_size(400, 100)
 
@@ -158,34 +163,67 @@ class Main(Gtk.Window):
         else:
             self.dialog_add_drink.state = False
             self.open_dialog_confirm_order()
-
-
     
     def open_dialog_confirm_order(self):
-
-        print("Abre dialogo de confirmacion de pedido")
-        dialog_confirm_order = Dialog_confirm_order(self)
-        print(self.dialog_add_drink.state)
-        if self.dialog_add_drink.state is True:
-            print("aumento de costo por adicion de bebestible")
-            dialog_confirm_order.cost = self.dialog_add_drink.cost
-        dialog_confirm_order.show_all()
-        response = dialog_confirm_order.run()
+        
+        total_burguer_price = self.burguer_price * self.unidades.get_value_as_int()
+        self.dialog_confirm_order = Dialog_confirm_order(self, total_burguer_price,\
+                self.dialog_add_drink.total_cost)
+        self.dialog_confirm_order.show_all()
+        response = self.dialog_confirm_order.run()
         if response == Gtk.ResponseType.OK:
             print("OK clicked")
+            self.ok_button_clicked()
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
 
-        dialog_confirm_order.destroy()
+        self.dialog_confirm_order.destroy()
+    
+    """ se aprieta boton Ok tal que se añade data ingresada por usuario"""
+    def ok_button_clicked(self):
+
+        current_time = datetime.datetime.now()
+        current_time = str(current_time)
+        current_time.split(".")
+        current_time = current_time[0]
+
+        data = open_file(self.file)
+        new_data = {"Fecha": current_time,
+                    "Nombre": self.dialog_confirm_order.get_name,
+                    "Metodo de Pago": self.dialog_confirm_order.get_payment_method,
+                    "Costo pedido": self.dialog_confirm_order.get_order_cost
+                    }
+
+        data.append(new_data)
+        save_data(data, self.file)
 
     def delate_button_clicked(self, widget):
         pass
 
     def button_open_file_clicked(self, widget):
-        pass
+        
+        flchooser = FileChooser(parent=self)
+
+        response = flchooser.run()
+        if response == Gtk.ResponseType.OK:
+            print("Open clicked")
+            file = flchooser.get_filename()
+            print("File selected: " + file)
+            file_name = flchooser.get_filename()
+            file_name = file_name.split("/")
+            if file_name[-1] == "registro_de_pedidos.json":
+                self.file = file
+                dialog_show_tree = DialogShowTree(self)
+                dialog_show_tree.tree.load_json_data(self.file)
+            else:
+                print("Archivo es incompatible a mostrar en TreeView.")
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        flchooser.destroy()
 
     def button_about_clicked(self, widget):
-        pass
+        AboutDialog()
 
 
 if __name__ == "__main__":

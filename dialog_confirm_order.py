@@ -6,10 +6,13 @@ gi.require_version("Gtk", "3.0")
 
 class Dialog_confirm_order(Gtk.Dialog):
 
-    def __init__(self, parent):
+    def __init__(self, parent, TBC, TDC):
         super().__init__(title="Confirmar orden", transient_for=parent, flags=0)
-        self._name = str
-        self._cost = 3500
+        self._name = None
+        self._total_burguer_cost = TBC
+        self._total_drink_cost = TDC
+        self._total_cost = self._total_burguer_cost +\
+        self._total_drink_cost
         self.add_buttons(
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
         )
@@ -24,14 +27,17 @@ class Dialog_confirm_order(Gtk.Dialog):
         for indice in lista:
             self.payment_method.append_text(indice)
         #self.payment_method.set_active(0)
-        self.total_pay = Gtk.Label(label=f"TOTAL: ${self._cost}")
+        self.total_pay = Gtk.Label(label=f"TOTAL: ${self._total_cost}")
 
         grid = Gtk.Grid()
         grid.add(label_name)
         grid.attach(self.name, 1, 0, 2, 1)
-        grid.attach_next_to(label_payment_method, label_name, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(self.payment_method, label_payment_method, Gtk.PositionType.RIGHT, 1, 1)
-        grid.attach_next_to(self.total_pay, label_payment_method, Gtk.PositionType.BOTTOM, 2, 1)
+        grid.attach_next_to(label_payment_method, label_name, \
+        Gtk.PositionType.BOTTOM, 1, 1)
+        grid.attach_next_to(self.payment_method, label_payment_method, \
+        Gtk.PositionType.RIGHT, 1, 1)
+        grid.attach_next_to(self.total_pay, label_payment_method, \
+        Gtk.PositionType.BOTTOM, 2, 1)
 
         self.add(grid)
 
@@ -40,21 +46,35 @@ class Dialog_confirm_order(Gtk.Dialog):
 
         #self.show_all()
 
-    
+    @property
     def get_name(self):
         return self.name.get_text()
+    
+    @property
+    def get_payment_method(self):
+        return self.payment_method.get_active_text()
 
     @property
-    def cost(self):
-        return self._cost
-
-    @cost.setter
-    def cost(self, add_cost):
-        print("entra a metodo cost")
-        if isinstance(add_cost, int):
-            self._cost = self._cost + add_cost
-            self.total_pay.set_label(f"TOTAL: ${self._cost}")
+    def get_order_cost(self):
+        return self._total_burguer_cost
+    
+    @get_order_cost.setter
+    def get_order_cost(self, cost):
+        if isinstance(cost, int):
+            self._total_burguer_cost = cost
         else:
-            print("Clase de variable: ",type(add_cost))
-            print("Dato ingresado no corresponde a clase solicitada.")
             return False
+
+    @property
+    def total_drink_cost(self):
+        return self.total_drink_cost
+    
+    @total_drink_cost.setter
+    def total_burguer_cost(self, cost):
+        if isinstance(cost, int):
+            self._total_drink_cost = cost
+        else:
+            return False
+
+    
+    

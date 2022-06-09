@@ -36,7 +36,6 @@ class Main(Gtk.Window):
 
         self.listbox = Gtk.ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.add(self.listbox)
 
         label_unidades = Gtk.Label(label="Unidades")
         adjustment = Gtk.Adjustment(upper=100, step_increment=1, page_increment=10)
@@ -114,8 +113,11 @@ class Main(Gtk.Window):
         row_7.add(box)
         self.listbox.add(row_7)
 
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        
+        self.message = Gtk.Label()
+        self.message.set_label("Abrir archivo con data historica para habilitar operaciones")
+
+        self.add(self.message)
+    
         self.connect("destroy", Gtk.main_quit)
 
         self.show_all()
@@ -184,14 +186,12 @@ class Main(Gtk.Window):
 
         current_time = datetime.datetime.now()
         current_time = str(current_time)
-        current_time.split(".")
-        current_time = current_time[0]
 
         data = open_file(self.file)
-        new_data = {"Fecha": current_time,
-                    "Nombre": self.dialog_confirm_order.get_name,
-                    "Metodo de Pago": self.dialog_confirm_order.get_payment_method,
-                    "Costo pedido": self.dialog_confirm_order.get_order_cost
+        new_data = {"Fecha": str(current_time),
+                    "Nombre": str(self.dialog_confirm_order.get_name),
+                    "Metodo de Pago": str(self.dialog_confirm_order.get_payment_method),
+                    "Costo pedido": str(self.dialog_confirm_order.get_order_cost)
                     }
 
         data.append(new_data)
@@ -212,6 +212,9 @@ class Main(Gtk.Window):
             file_name = flchooser.get_filename()
             file_name = file_name.split("/")
             if file_name[-1] == "registro_de_pedidos.json":
+                self.message.destroy()
+                self.add(self.listbox)
+                self.show_all()
                 self.file = file
                 dialog_show_tree = DialogShowTree(self)
                 dialog_show_tree.tree.load_json_data(self.file)

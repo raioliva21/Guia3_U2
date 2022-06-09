@@ -25,7 +25,7 @@ class TreeView(Gtk.TreeView):
         datos = open_file(file)
         print("se carga data json en treeview")
         for item in datos:
-            # proceso por medio de listas por comprensión
+            print("proceso por medio de listas por comprensión")
             line = [x for x in item.values()]
             print(line)
             self.modelo.append(line)

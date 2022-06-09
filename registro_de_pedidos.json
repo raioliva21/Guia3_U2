@@ -1,14 +1,14 @@
 [
     {
-        "Fecha": "HAHAHA",
-        "Nombre": "Raimundo",
+        "Fecha": "2022-06-08 22:20:03.783161",
+        "Nombre": "cristobal",
         "Metodo de Pago": "Tarjeta Credito/Debito",
-        "Costo pedido": "5000"
+        "Costo pedido": "10500"
     },
     {
-        "Fecha": "2",
-        "Nombre": "raimundo",
-        "Metodo de Pago": "Tarjeta Credito/Debito",
-        "Costo pedido": 7000
+        "Fecha": "2022-06-08 22:21:59.593825",
+        "Nombre": "Esteban",
+        "Metodo de Pago": "Efectivo",
+        "Costo pedido": "7000"
     }
 ]

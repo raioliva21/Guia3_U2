@@ -11,7 +11,6 @@ class TreeView(Gtk.TreeView):
 
         self.modelo = Gtk.ListStore(str, str, str, str)
         self.set_model(model=self.modelo)
-
         nombre_columnas = ("Fecha", "Nombre", "Metodo de Pago", "Costo pedido")
         cell = Gtk.CellRendererText()
         for item in range(len(nombre_columnas)):
@@ -23,9 +22,8 @@ class TreeView(Gtk.TreeView):
     def load_json_data(self, file):
         # llamamos al metodo de abrir el archivo
         datos = open_file(file)
-        print("se carga data json en treeview")
         for item in datos:
-            print("proceso por medio de listas por comprensión")
+            """proceso por medio de listas por comprensión"""
             line = [x for x in item.values()]
             print(line)
             self.modelo.append(line)

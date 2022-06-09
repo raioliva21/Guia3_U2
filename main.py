@@ -89,6 +89,9 @@ class Main(Gtk.Window):
         row_5, self.combo_mayonesas = create_row(label, lista=mayonesas)
         self.listbox.add(row_5)
 
+        self.combos = [self.combo_panes, self.combo_hamburguesa, 
+        self.combo_agregados, self.combo_mayonesas]
+
         label_bebestible = Gtk.Label(label="Bebestible")
         self.button1 = Gtk.RadioButton.new_with_label_from_widget(None, "Si")
         self.button1.connect("toggled", self.on_button_toggled, "Si")
@@ -135,11 +138,8 @@ class Main(Gtk.Window):
 
     def continue_button_clicked(self, widget):
 
-        combos = [self.combo_panes, self.combo_hamburguesa, 
-        self.combo_agregados, self.combo_mayonesas]
-
         if self.unidades.get_value_as_int() != 0:
-            for combo in combos:
+            for combo in self.combos:
                 if combo.get_active_iter() is not None:
                     continue
                 else:
@@ -175,14 +175,15 @@ class Main(Gtk.Window):
         response = self.dialog_confirm_order.run()
         if response == Gtk.ResponseType.OK:
             print("OK clicked")
-            self.ok_button_clicked()
+            self.confirm_button_clicked()
+            self.delate_button_clicked(None)
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
 
         self.dialog_confirm_order.destroy()
     
-    """ se aprieta boton Ok tal que se añade data ingresada por usuario"""
-    def ok_button_clicked(self):
+    """ se aprieta boton Ok tal que se añade registro en archivo de data historica """
+    def confirm_button_clicked(self):
 
         current_time = datetime.datetime.now()
         current_time = str(current_time)
@@ -198,7 +199,9 @@ class Main(Gtk.Window):
         save_data(data, self.file)
 
     def delate_button_clicked(self, widget):
-        pass
+        self.unidades.set_value(0)
+        for combo in self.combos:
+            combo.set_active(0)
 
     def button_open_file_clicked(self, widget):
         

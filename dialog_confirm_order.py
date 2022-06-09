@@ -1,8 +1,8 @@
 from tkinter import dialog
 from dialog_add_drink import Dialog_add_drink
-from gi.repository import Gtk
 import gi
 gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
 
 class Dialog_confirm_order(Gtk.Dialog):
 
@@ -26,7 +26,6 @@ class Dialog_confirm_order(Gtk.Dialog):
         self.payment_method.set_entry_text_column(0)
         for indice in lista:
             self.payment_method.append_text(indice)
-        #self.payment_method.set_active(0)
         self.total_pay = Gtk.Label(label=f"TOTAL: ${self._total_cost}")
 
         grid = Gtk.Grid()
@@ -39,12 +38,11 @@ class Dialog_confirm_order(Gtk.Dialog):
         grid.attach_next_to(self.total_pay, label_payment_method, \
         Gtk.PositionType.BOTTOM, 2, 1)
 
-        self.add(grid)
-
+        #self.add(grid)
         box = self.get_content_area()
         box.add(grid)
+        #self.add(box)
 
-        #self.show_all()
 
     @property
     def get_name(self):
@@ -56,7 +54,7 @@ class Dialog_confirm_order(Gtk.Dialog):
 
     @property
     def get_order_cost(self):
-        return self._total_burguer_cost
+        return self._total_cost
     
     @get_order_cost.setter
     def get_order_cost(self, cost):

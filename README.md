@@ -8,7 +8,7 @@ Este pograma tiene por objetivo facilitar el registro de data asociada a pedidos
 1. Main: Objeto clase Main que hereda de la clase Gtk.Window.
   - Atriubutos:
       (caracter publico)
-  -   self.file = None #ruta de archivo habilitado a mostrar en treeview
+    -  self.file = None #ruta de archivo habilitado a mostrar en treeview
     - self.burguer_price = 3500 #precio estandar de burguer
     - HB = Gtk.HeaderBar() #configura titlebar de self
     - self.button_open_file y self.button_about #se adhieren a atributo HB
